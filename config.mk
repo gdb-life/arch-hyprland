@@ -1,5 +1,6 @@
 # config.mk
 
+# repo root
 REP_ROOT=$(shell git rev-parse --show-toplevel)
 
 # dirs

@@ -30,4 +30,8 @@ for dir in ${dirs[@]}; do
     fi
 done
 xdg-user-dirs-update
+
+# for screenshots
+mkdir -p ~/pictures/screenshots
+
 log done
