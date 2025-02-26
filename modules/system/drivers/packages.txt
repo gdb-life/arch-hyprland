@@ -1,0 +1,4 @@
+pipewire
+lib32-pipewire
+pipewire-pulse
+wireplumber

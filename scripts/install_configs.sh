@@ -1,31 +1,23 @@
 #!/bin/bash
 
-# global variables
+# Global variables
 REP_ROOT="$(git rev-parse --show-toplevel)"
-source ${REP_ROOT}/scripts/.env
-module=$1
 
-# logs
-source ${REP_ROOT}/scripts/logs.sh
+# Logs
+source "${REP_ROOT}/scripts/logs.sh"
 
-# install configs
-function install_configs() {
-    local configs_paths=($(jq -r "(try .${module}.configs_paths.main[]?), (try .${module}.configs_paths.modules[]?)" ${REP_ROOT}/setup.json))
-    local install_paths=($(jq -r "(try .${module}.install_paths.main[]?), (try .${module}.install_paths.modules[]?)" ${REP_ROOT}/setup.json | sed "s|~|$HOME|g"))
-     
-    log info "Installing configs..."
+# Copying configs
+install_configs() {
+    local config_src="$1"
+    local config_dest="$2"
 
-    for i in "${!install_paths[@]}"; do
-        path="${install_paths[$i]}"
-        config="${configs_paths[$i]}"
-        dir_name="$(dirname "$path")"
-        config_name="$(basename "$path")"
-        if [[ ! -d "$dir_name" ]]; then
-            mkdir -p ${dir_name}
-        fi
-        ln -sf ${CONFIGS_DIR}/${config} ${path}
-        log success "created $path"
-    done
+    if [ ! -d "$config_src" ]; then
+        log error "directory $config_src not found!"
+        exit 1
+    fi
+
+    mkdir -p "$config_dest"
+    cp -r --remove-destination "$config_src"/* "$config_dest"
+
+    log success "configs copied to $config_dest"
 }
-
-install_configs

@@ -1,75 +1,51 @@
-include config.mk
+# Global variables
+MODULES := $(wildcard modules/*/*)
+INSTALL_SCRIPTS := $(wildcard modules/*/*/install.sh)
 
-.PHONY: all hyprland clean check-dependencies
+# Colors
+GREEN=\033[32m
+RED=\033[31m
+YELLOW=\033[33m
+BLUE=\033[36m
+ORANGE1=\033[38;5;208m
+ORANGE2=\033[38;5;202m
+RESET=\033[0m
 
-all: check-commands hyprland hyprpaper hypridle hyprlock xdph wofi waybar programs utils drivers
+# Logging
+LOG = echo -e "${BLUE}[MAKE]${RESET}"
 
-check-commands:
-	@echo
-	@echo -e "$(YELLOW)[MAKE]$(RESET) Checking commands..."
-	@bash $(SCRIPTS_DIR)/check_commands.sh
+.PHONY: all install $(notdir $(MODULES))
 
-hyprland:
-	@echo
-	@echo -e "$(YELLOW)[MAKE]$(RESET) Installing hyprland..."
-	@bash $(SCRIPTS_DIR)/install_packages.sh hyprland
-	@bash $(SCRIPTS_DIR)/install_configs.sh hyprland
+all: install
 
-hyprpaper:
-	@echo
-	@echo -e "$(YELLOW)[MAKE]$(RESET) Installing hyprpaper..."
-	@bash $(SCRIPTS_DIR)/install_packages.sh hyprpaper
-	@bash $(SCRIPTS_DIR)/install_configs.sh hyprpaper
+install:
+	@$(LOG) "${BLUE}Installing all modules...${RESET}"
+	@for script in $(INSTALL_SCRIPTS); do \
+		module=$$(basename $$(dirname $$script)); \
+		category=$$(basename $$(dirname $$(dirname $$script))); \
+		$(LOG) "${YELLOW}Installing${RESET} ${ORANGE2}$$category${RESET} ${ORANGE1}$$module${RESET}..."; \
+		bash $$script; \
+	done
 
-hypridle:
-	@echo
-	@echo -e "$(YELLOW)[MAKE]$(RESET) Installing hypridle..."
-	@bash $(SCRIPTS_DIR)/install_packages.sh hypridle
-	@bash $(SCRIPTS_DIR)/install_configs.sh hypridle
+$(notdir $(MODULES)):
+	@FOUND_SCRIPT=$$(find modules -type f -path "*/$@/install.sh"); \
+	if [ -n "$$FOUND_SCRIPT" ]; then \
+		category=$$(basename $$(dirname $${FOUND_SCRIPT})); \
+		$(LOG) "${YELLOW}Installing${RESET} ${ORANGE2}$$category${RESET} ${ORANGE1}$$@${RESET}..."; \
+		bash $$FOUND_SCRIPT; \
+	else \
+		$(LOG) "${RED}Module $@ not found!${RESET}"; \
+		exit 1; \
+	fi
 
-hyprlock:
-	@echo
-	@echo -e "$(YELLOW)[MAKE]$(RESET) Installing hyprlock..."
-	@bash $(SCRIPTS_DIR)/install_packages.sh hyprlock
-	@bash $(SCRIPTS_DIR)/install_configs.sh hyprlock
-
-xdph:
-	@echo
-	@echo -e "$(YELLOW)[MAKE]$(RESET) Installing xdph..."
-	@bash $(SCRIPTS_DIR)/install_packages.sh xdph
-	@bash $(SCRIPTS_DIR)/install_configs.sh xdph
-
-wofi:
-	@echo
-	@echo -e "$(YELLOW)[MAKE]$(RESET) Installing wofi..."
-	@bash $(SCRIPTS_DIR)/install_packages.sh wofi
-
-waybar:
-	@echo
-	@echo -e "$(YELLOW)[MAKE]$(RESET) Installing waybar..."
-	@bash $(SCRIPTS_DIR)/install_packages.sh waybar
-	@bash $(SCRIPTS_DIR)/install_configs.sh waybar
-
-programs:
-	@echo
-	@echo -e "$(YELLOW)[MAKE]$(RESET) Installing programs..."
-	@bash $(SCRIPTS_DIR)/install_packages.sh programs
-	@bash $(SCRIPTS_DIR)/install_configs.sh programs
-
-utils:
-	@echo
-	@echo -e "$(YELLOW)[MAKE]$(RESET) Installing utils..."
-	@bash $(SCRIPTS_DIR)/install_packages.sh utils
-	@bash $(SCRIPTS_DIR)/configurations/utils.sh
-
-drivers:
-	@echo
-	@echo -e "$(YELLOW)[MAKE]$(RESET) Installing drivers..."
-	@bash $(SCRIPTS_DIR)/install_packages.sh drivers
-
-clean:
-	@echo
-	@echo -e "$(YELLOW)[MAKE]$(RESET) Cleaning configurations..."
-	@rm -rf $(INSTALL_DIR)/hypr || { echo "$(RED)[MAKE][ERROR]$(RESET) error delete hypr"; exit 1; }
-	@rm -rf $(INSTALL_DIR)/waybar || { echo "$(RED)[MAKE][ERROR]$(RESET) error delete waybar"; exit 1; }
-	@rm -rf $(INSTALL_DIR)/kitty || { echo "$(RED)[MAKE][ERROR]$(RESET) error delete kitty"; exit 1; }
+# %:
+# 	@FOUND_SCRIPT="modules/$*/install.sh"; \
+# 	if [ -f "$$FOUND_SCRIPT" ]; then \
+# 		category=$$(dirname $*); \
+# 		module=$$(basename $*); \
+# 		$(LOG) "${YELLOW}Installing${RESET} ${ORANGE2}$$category${RESET} ${ORANGE1}$$module${RESET}..."; \
+# 		bash $$FOUND_SCRIPT; \
+# 	else \
+# 		$(LOG) "${RED}Module $* not found!${RESET}"; \
+# 		exit 1; \
+# 	fi
