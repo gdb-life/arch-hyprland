@@ -12,3 +12,5 @@ source "${REP_ROOT}/scripts/install_configs.sh"
 
 install_packages "${MODULE_DIR}/packages.txt"
 install_configs "${MODULE_DIR}/configs" "$HOME/.config/hypr"
+
+mkdir -p ~/pictures/screenshots
