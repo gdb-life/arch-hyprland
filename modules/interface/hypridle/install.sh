@@ -8,8 +8,7 @@ MODULE_DIR="$(dirname "$0")"
 
 if [ "$1" == "install" ]; then
     # Connect functions 
-    source "${REP_ROOT}/scripts/install_packages.sh"
-    source "${REP_ROOT}/scripts/install_configs.sh"
+    source "${REP_ROOT}/scripts/installation.sh"
     install_packages "${MODULE_DIR}/packages.txt"
-    install_configs "${MODULE_DIR}/configs" "$HOME/.config/hypr"
+    copy_configs "${MODULE_DIR}/configs" "$HOME/.config/hypr"
 fi

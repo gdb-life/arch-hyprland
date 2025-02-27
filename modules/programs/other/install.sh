@@ -8,6 +8,6 @@ MODULE_DIR="$(dirname "$0")"
 
 if [ "$1" == "install" ]; then
     # Connect functions
-    source "${REP_ROOT}/scripts/install_packages.sh"
+    source "${REP_ROOT}/scripts/installation.sh"
     install_packages "${MODULE_DIR}/packages.txt"
 fi
