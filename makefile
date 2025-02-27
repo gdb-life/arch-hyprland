@@ -24,7 +24,7 @@ install:
 		module=$$(basename $$(dirname $$script)); \
 		category=$$(basename $$(dirname $$(dirname $$script))); \
 		$(LOG) "${YELLOW}Installing${RESET} ${ORANGE2}$$category${RESET} ${ORANGE1}$$module${RESET}..."; \
-		bash $$script; \
+		bash $$script install; \
 	done
 
 $(notdir $(MODULES)):
@@ -32,7 +32,7 @@ $(notdir $(MODULES)):
 	if [ -n "$$FOUND_SCRIPT" ]; then \
 		category=$$(basename $$(dirname $${FOUND_SCRIPT})); \
 		$(LOG) "${YELLOW}Installing${RESET} ${ORANGE2}$$category${RESET} ${ORANGE1}$$@${RESET}..."; \
-		bash $$FOUND_SCRIPT; \
+		bash $$FOUND_SCRIPT install; \
 	else \
 		$(LOG) "${RED}Module $@ not found!${RESET}"; \
 		exit 1; \
