@@ -14,9 +14,7 @@ RESET=\033[0m
 # Logging
 LOG = echo -e "${BLUE}[MAKE]${RESET}"
 
-.PHONY: all install $(notdir $(MODULES))
-
-all: install
+.PHONY: install $(notdir $(MODULES)) uninstall
 
 install:
 	@$(LOG) "${BLUE}Installing all modules...${RESET}"
@@ -38,6 +36,16 @@ $(notdir $(MODULES)):
 		exit 1; \
 	fi
 
+uninstall:
+	@$(LOG) "${BLUE}Uninstalling all modules...${RESET}"
+	@for script in $(INSTALL_SCRIPTS); do \
+		module=$$(basename $$(dirname $$script)); \
+		category=$$(basename $$(dirname $$(dirname $$script))); \
+		$(LOG) "${YELLOW}Uninstalling${RESET} ${ORANGE2}$$category${RESET} ${ORANGE1}$$module${RESET}..."; \
+		bash $$script uninstall; \
+	done
+
+# this is if you want to install modules as gui/other (not names conflicts)
 # %:
 # 	@FOUND_SCRIPT="modules/$*/install.sh"; \
 # 	if [ -f "$$FOUND_SCRIPT" ]; then \

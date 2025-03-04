@@ -6,8 +6,8 @@ REP_ROOT="$(git rev-parse --show-toplevel)"
 # Logs
 source "${REP_ROOT}/scripts/logs.sh"
 
-# Install packages
-install_packages() {
+# Remove packages
+remove_packages() {
     local pkg_file="$1"
 
     if [ ! -f "$pkg_file" ]; then
@@ -23,10 +23,10 @@ install_packages() {
         if pacman -Qi "$package" &>/dev/null; then
             log success "$package already installed"
         else
-            if sudo pacman -S --noconfirm --needed "$package"; then
-                log success "$package installed"
+            if sudo pacman -Rns --noconfirm "$package"; then
+                log success "$package removed"
             else
-                log error "error installing $package"
+                log error "error removing $package"
                 read -n 1 -s -r
                 exit 1
             fi
@@ -34,8 +34,8 @@ install_packages() {
     done
 }
 
-# Copying configs
-copy_configs() {
+# Remove configs
+remove_configs() {
     local config_src="$1"
     local config_dest="$2"
 
@@ -45,12 +45,21 @@ copy_configs() {
         exit 1
     fi
 
-    mkdir -p "$config_dest"
-    if cp -r --remove-destination "$config_src"/* "$config_dest"; then
-        log success "configs copied to $config_dest"
+    rm -rf "$config_dest"
+
+    if [ ! -e "$config_dest" ]; then
+        log success "configs removed from $config_dest"
     else
-        log error "error copying configs to $config_dest"
+        log error "error removing configs from $config_dest"
         read -n 1 -s -r
         exit 1
+    fi
+
+    local parent_dir
+    parent_dir=$(dirname "$config_dest")
+
+    if [ -d "$parent_dir" ] && [ -z "$(ls -A "$parent_dir")" ]; then
+        rmdir "$parent_dir"
+        log success "empty directory $parent_dir removed"
     fi
 }
