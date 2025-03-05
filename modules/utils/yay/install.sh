@@ -5,6 +5,10 @@ REP_ROOT="$(git rev-parse --show-toplevel)"
 MODULE_DIR="$(dirname "$0")"
 YAY_DIR="/tmp/yay"
 
+# Logs
+source "${REP_ROOT}/scripts/logs.sh"
+
+# Install
 if [ "$1" == "install" ]; then
     if command -v yay &>/dev/null; then
         log success "yay already installed"
@@ -27,6 +31,7 @@ if [ "$1" == "install" ]; then
     log success "yay installed"
 fi
 
+# Uninstall
 if [ "$1" == "uninstall" ]; then
     if ! command -v yay &>/dev/null; then
         log info "yay not installed"
