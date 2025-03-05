@@ -20,10 +20,10 @@ install_packages() {
     packages=$(cat "$pkg_file")
 
     for package in $packages; do
-        if pacman -Qi "$package" &>/dev/null; then
+        if yay -Qi "$package" &>/dev/null; then
             log success "$package already installed"
         else
-            sudo pacman -S --noconfirm --needed "$package" || { log error "error installing $package"; exit 1; }
+            yay -S --noconfirm --needed "$package" || { log error "error installing $package"; exit 1; }
         fi
     done
 }

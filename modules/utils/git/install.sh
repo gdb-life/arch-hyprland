@@ -2,14 +2,18 @@
 
 # Global variables
 REP_ROOT="$(git rev-parse --show-toplevel)"
+MODULE_DIR="$(dirname "$0")"
 
 # Logs
 source "${REP_ROOT}/scripts/logs.sh"
 
 # Install
 if [ "$1" == "install" ]; then
-   read -rp "enter the username: " USER
-   read -rp "enter the email: " EMAIL
+    source "${REP_ROOT}/scripts/installation.sh"
+    install_packages "${MODULE_DIR}/packages.txt"
+
+    read -rp "enter the username: " USER
+    read -rp "enter the email: " EMAIL
 
    if [[ -z "$USER" || -z "$EMAIL" ]]; then
         log error "username and email cannot be empty"
@@ -25,6 +29,9 @@ fi
 
 # Uninstall
 if [ "$1" == "uninstall" ]; then
+    source "${REP_ROOT}/scripts/cleaning.sh"
+    remove_packages "${MODULE_DIR}/packages.txt"
+
     git config --global --unset user.name
     git config --global --unset user.email
 

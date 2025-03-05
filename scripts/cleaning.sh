@@ -20,12 +20,8 @@ remove_packages() {
     packages=$(cat "$pkg_file")
 
     for package in $packages; do
-        if pacman -Qi "$package" &>/dev/null; then
-            log success "$package already installed"
-        else
-            sudo pacman -Rns --noconfirm "$package" || { log error "error removing $package"; exit 1; }
-            log success "$package removed"
-        fi
+        yay -Rns --noconfirm "$package" || { log error "error removing $package"; exit 1; }
+        log success "$package removed"
     done
 }
 
