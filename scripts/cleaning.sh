@@ -23,13 +23,8 @@ remove_packages() {
         if pacman -Qi "$package" &>/dev/null; then
             log success "$package already installed"
         else
-            if sudo pacman -Rns --noconfirm "$package"; then
-                log success "$package removed"
-            else
-                log error "error removing $package"
-                read -n 1 -s -r
-                exit 1
-            fi
+            sudo pacman -Rns --noconfirm "$package" || { log error "error removing $package"; exit 1; }
+            log success "$package removed"
         fi
     done
 }
@@ -59,7 +54,7 @@ remove_configs() {
     parent_dir=$(dirname "$config_dest")
 
     if [ -d "$parent_dir" ] && [ -z "$(ls -A "$parent_dir")" ]; then
-        rmdir "$parent_dir"
+        rmdir "$parent_dir" || { log error "error removing empty directory $parent_dir"; exit 1; }
         log success "empty directory $parent_dir removed"
     fi
 }

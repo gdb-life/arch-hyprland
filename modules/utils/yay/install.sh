@@ -2,7 +2,6 @@
 
 # Global variables
 REP_ROOT="$(git rev-parse --show-toplevel)"
-MODULE_DIR="$(dirname "$0")"
 YAY_DIR="/tmp/yay"
 
 # Logs

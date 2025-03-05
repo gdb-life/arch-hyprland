@@ -23,13 +23,7 @@ install_packages() {
         if pacman -Qi "$package" &>/dev/null; then
             log success "$package already installed"
         else
-            if sudo pacman -S --noconfirm --needed "$package"; then
-                log success "$package installed"
-            else
-                log error "error installing $package"
-                read -n 1 -s -r
-                exit 1
-            fi
+            sudo pacman -S --noconfirm --needed "$package" || { log error "error installing $package"; exit 1; }
         fi
     done
 }
@@ -46,11 +40,6 @@ copy_configs() {
     fi
 
     mkdir -p "$config_dest"
-    if cp -r --remove-destination "$config_src"/* "$config_dest"; then
-        log success "configs copied to $config_dest"
-    else
-        log error "error copying configs to $config_dest"
-        read -n 1 -s -r
-        exit 1
-    fi
+    cp -r --remove-destination "$config_src"/* "$config_dest" || { log error "error copying configs to $config_dest"; exit 1; }
+    log success "configs copied to $config_dest"
 }
