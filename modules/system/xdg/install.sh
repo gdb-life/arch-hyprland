@@ -19,6 +19,10 @@ if [ "$1" == "install" ]; then
 
     mkdir -p "$(dirname "$CONFIG_FILE")" || { log error "failed to create config directory"; exit 1; }
 
+    mkdir -p "$HOME/desktop" "$HOME/downloads" "$HOME/documents" \
+            "$HOME/music" "$HOME/pictures" "$HOME/videos" \
+            "$HOME/templates" "$HOME/public" || { log error "failed to create XDG directories"; exit 1; }
+
     cat > "$CONFIG_FILE" <<EOF || { log error "failed to write to $CONFIG_FILE"; exit 1; }
 XDG_DESKTOP_DIR="\$HOME/desktop"
 XDG_DOWNLOAD_DIR="\$HOME/downloads"
@@ -30,7 +34,7 @@ XDG_TEMPLATES_DIR="\$HOME/templates"
 XDG_PUBLICSHARE_DIR="\$HOME/public"
 EOF
 
-    xdg-user-dirs-update --force || { log error "failed to update xdg-user-dirs"; exit 1; }
+    xdg-user-dirs-update || { log error "failed to update xdg-user-dirs"; exit 1; }
 
     log success "xdg-user-dirs configuration installed"
 fi
