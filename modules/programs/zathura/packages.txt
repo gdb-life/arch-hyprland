@@ -1,0 +1,3 @@
+zathura
+zathura-djvu
+zathura-pdf-poppler

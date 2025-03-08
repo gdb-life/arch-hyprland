@@ -1,6 +1,2 @@
-xdg-user-dirs
-udisks2
-udiskie
-gvfs
 network-manager-applet
 networkmanager-strongswan
