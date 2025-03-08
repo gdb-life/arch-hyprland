@@ -1,0 +1,13 @@
+thunar
+udisks2
+udiskie
+gvfs
+ntfs-3g
+android-file-transfer
+unrar
+dosfstools
+ntfsprogs
+tree
+xarchiver
+mc
+cmake

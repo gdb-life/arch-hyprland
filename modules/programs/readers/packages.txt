@@ -1,0 +1,6 @@
+zathura
+zathura-djvu
+zathura-pdf-poppler
+ttf-ms-fonts
+libreoffice-fresh-ru
+obsidian

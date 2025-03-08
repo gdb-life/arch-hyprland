@@ -1,4 +1,0 @@
-thunar
-udisks2
-udiskie
-gvfs
