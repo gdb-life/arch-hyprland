@@ -1,0 +1,68 @@
+├── CMakeLists.txt                # Основной CMake-файл для сборки
+├── src
+│   ├── main.cpp                   # Точка входа в программу
+│   ├── HyprManager.cpp             # Основной класс управления модулями
+│   ├── HyprManager.h               # Заголовочный файл HyprManager
+│   ├── Module.cpp                  # Класс, представляющий модуль
+│   ├── Module.h                    # Заголовочный файл Module
+│   ├── CommandExecutor.cpp          # Управление выполнением команд
+│   ├── CommandExecutor.h            # Заголовочный файл CommandExecutor
+│   ├── Logger.cpp                   # Логирование
+│   ├── Logger.h                     # Заголовочный файл Logger
+│   ├── ConfigParser.cpp              # Чтение конфигураций (packages.txt, install.sh)
+│   ├── ConfigParser.h                # Заголовочный файл ConfigParser
+│   ├── ParallelExecutor.cpp         # Управление параллельной установкой
+│   ├── ParallelExecutor.h           # Заголовочный файл ParallelExecutor
+│   ├── UI
+│   │   ├── MainWindow.cpp           # Главное окно Qt-интерфейса
+│   │   ├── MainWindow.h             # Заголовочный файл MainWindow
+│   │   ├── UIManager.cpp            # Управление UI
+│   │   ├── UIManager.h              # Заголовочный файл UIManager
+│   │   ├── ModuleWidget.cpp         # Виджет для отображения модуля
+│   │   ├── ModuleWidget.h           # Заголовочный файл ModuleWidget
+│   │   └── resources.qrc            # Ресурсы для Qt (иконки, стили)
+│   ├── utils
+│   │   ├── helpers.cpp              # Вспомогательные функции
+│   │   ├── helpers.h                # Заголовочный файл helpers
+│   │   ├── filesystem.cpp           # Работа с файлами и путями
+│   │   ├── filesystem.h             # Заголовочный файл filesystem
+│   │   ├── settings.cpp             # Настройки проекта
+│   │   ├── settings.h               # Заголовочный файл settings
+├── include                          # Каталог для заголовочных файлов (если понадобится)
+├── modules                          # Каталог с модулями, как в текущем проекте
+│   ├── interface
+│   │   ├── hypridle
+│   │   │   ├── configs
+│   │   │   │   └── hypridle.conf
+│   │   │   ├── install.sh
+│   │   │   └── packages.txt
+│   │   ├── hyprland
+│   │   │   ├── configs
+│   │   │   │   └── hyprland.conf
+│   │   │   ├── install.sh
+│   │   │   └── packages.txt
+│   │   ├── waybar
+│   │   │   ├── configs
+│   │   │   │   ├── config.jsonc
+│   │   │   │   └── style.css
+│   │   │   ├── install.sh
+│   │   │   └── packages.txt
+│   ├── system
+│   │   ├── drivers
+│   │   │   ├── install.sh
+│   │   │   └── packages.txt
+│   │   ├── sddm
+│   │   │   ├── install.sh
+│   │   │   └── packages.txt
+│   │   └── xdg
+│   │       ├── install.sh
+│   │       └── packages.txt
+├── scripts                          # Каталог для вспомогательных скриптов
+│   ├── cleaning.sh
+│   ├── installation.sh
+│   ├── logs.sh
+├── ui                               # Каталог для файлов UI (если будет отдельно от src)
+│   ├── MainWindow.ui                 # Qt Designer файл для главного окна
+│   ├── icons                         # Иконки для UI
+│   ├── styles.qss                     # Qt стили
+└── README.md                        # Документация по проекту
