@@ -8,6 +8,7 @@ MODULE_DIR="$(dirname "$0")"
 if [ "$1" == "install" ]; then
     source "${REP_ROOT}/scripts/installation.sh"
     install_packages "${MODULE_DIR}/packages.txt"
+    sudo cpupower frequency-set --governor performance
 fi
 
 # Uninstall
