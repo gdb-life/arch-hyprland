@@ -3,3 +3,4 @@ cursor-bin
 qtcreator
 pycharm-community-edition
 processing
+sublime-text-4
