@@ -1,7 +1,2 @@
 hyprland
 brightnessctl
-
-feh
-grim
-slurp
-wl-clipboard
