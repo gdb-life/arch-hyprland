@@ -1,4 +1,5 @@
 thunar
+xfce4-settings
 udisks2
 udiskie
 gvfs
