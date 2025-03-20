@@ -3,3 +3,5 @@ networkmanager-strongswan
 reflector
 wget
 openssh
+openvpn
+openresolv
