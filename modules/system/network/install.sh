@@ -26,6 +26,7 @@ if [ "$1" == "install" ]; then
     done
     echo "$LOGIN" >> "$VPN_DIR/auth.txt"
     echo "$PASSWORD" >> "$VPN_DIR/auth.txt"
+    chmod 600 auth.txt
 fi
 
 # Uninstall

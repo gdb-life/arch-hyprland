@@ -1,1 +1,3 @@
 kitty
+ttf-meslo-nerd
+ttf-meslo-nerd-font-powerlevel10k

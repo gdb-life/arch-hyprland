@@ -8,7 +8,14 @@ MODULE_DIR="$(dirname "$0")"
 if [ "$1" == "install" ]; then
     source "${REP_ROOT}/scripts/installation.sh"
     install_packages "${MODULE_DIR}/packages.txt"
+
+    # docker
     sudo systemctl enable docker.socket
+    gpg --generate-key
+    echo "you need to run \"pass init <your-gpg-key-id>\" (~/.gnupg)"
+    echo "you can list your gpg keys with \"gpg --list-keys\""
+    echo "later run \"docker login\""
+    read -n 1 -s -r
 fi
 
 # Uninstall
