@@ -15,7 +15,7 @@ if [ "$1" == "install" ]; then
     echo "you need to run \"pass init <your-gpg-key-id>\" (~/.gnupg)"
     echo "you can list your gpg keys with \"gpg --list-keys\""
     echo "later run \"docker login\""
-    read -n 1 -s -r
+    # read -n 1 -s -r
 fi
 
 # Uninstall
