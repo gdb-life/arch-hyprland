@@ -1,7 +1,15 @@
+# base
+
 network-manager-applet
 networkmanager-strongswan
+
+# utils
+
 reflector
 wget
+
+# for vpn
+
 openssh
 openvpn
 openresolv

@@ -1,8 +1,6 @@
 visual-studio-code-bin
-cursor-bin
 qtcreator
 pycharm-community-edition
-processing
 sublime-text-4
 docker
 docker-desktop
