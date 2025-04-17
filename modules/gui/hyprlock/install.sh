@@ -15,6 +15,6 @@ fi
 # Uninstall
 if [ "$1" == "uninstall" ]; then
     source "${REP_ROOT}/scripts/cleaning.sh"
-    # remove_packages "${MODULE_DIR}/packages.txt"
+    remove_packages "${MODULE_DIR}/packages.txt"
     remove_configs "${MODULE_DIR}/configs" "${CONFIG_PATH}"
 fi
