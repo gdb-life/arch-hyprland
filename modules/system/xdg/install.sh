@@ -3,6 +3,7 @@
 # Global variables
 REP_ROOT="$(git rev-parse --show-toplevel)"
 MODULE_DIR="$(dirname "$0")"
+PACKAGES="${MODULE_DIR}/packages.txt"
 CONFIG_FILE="$HOME/.config/user-dirs.dirs"
 
 # Logs
@@ -11,7 +12,7 @@ source "${REP_ROOT}/scripts/logs.sh"
 # Install
 if [ "$1" == "install" ]; then
     source "${REP_ROOT}/scripts/installation.sh"
-    install_packages "${MODULE_DIR}/packages.txt"
+    install_packages "${PACKAGES}"
 
     if [ -f "$CONFIG_FILE" ]; then
         rm -f "$CONFIG_FILE" || { log error "failed to remove old config file"; exit 1; }
@@ -42,7 +43,7 @@ fi
 # Uninstall
 if [ "$1" == "uninstall" ]; then
     source "${REP_ROOT}/scripts/cleaning.sh"
-    remove_packages "${MODULE_DIR}/packages.txt"
+    remove_packages "${PACKAGES}"
 
     if [ -f "$CONFIG_FILE" ]; then
         rm -f "$CONFIG_FILE" || { log error "failed to remove config file"; exit 1; }

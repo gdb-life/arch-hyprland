@@ -3,6 +3,7 @@
 # Global variables
 REP_ROOT="$(git rev-parse --show-toplevel)"
 MODULE_DIR="$(dirname "$0")"
+PACKAGES="${MODULE_DIR}/packages.txt"
 CONFIG_DIR="/etc/sddm.conf.d"
 CONFIG_FILE="${CONFIG_DIR}/autologin.conf"
 
@@ -12,7 +13,7 @@ source "${REP_ROOT}/scripts/logs.sh"
 # Install
 if [ "$1" == "install" ]; then
     source "${REP_ROOT}/scripts/installation.sh"
-    install_packages "${MODULE_DIR}/packages.txt"
+    install_packages "${PACKAGES}"
     sudo systemctl enable sddm
 
     read -rp "enter the username to autologin: " USER
@@ -51,7 +52,7 @@ fi
 if [ "$1" == "uninstall" ]; then
     sudo systemctl disable sddm
     source "${REP_ROOT}/scripts/cleaning.sh"
-    remove_packages "${MODULE_DIR}/packages.txt"
+    remove_packages "${PACKAGES}"
     if [[ -f "$CONFIG_FILE" ]]; then
         sudo rm -f "$CONFIG_FILE" || { log error "Failed to remove $CONFIG_FILE"; exit 1; }
         log success "SDDM autologin configuration removed"

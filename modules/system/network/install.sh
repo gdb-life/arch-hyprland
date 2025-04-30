@@ -3,12 +3,14 @@
 # Global variables
 REP_ROOT="$(git rev-parse --show-toplevel)"
 MODULE_DIR="$(dirname "$0")"
-VPN_DIR="$HOME/.openvpn"
+PACKAGES="${MODULE_DIR}/packages.txt"
+SRC_CONFIGS="${MODULE_DIR}/configs"
+DEST_CONFIGS="$HOME/.openvpn"
 
 # Install
 if [ "$1" == "install" ]; then
     source "${REP_ROOT}/scripts/installation.sh"
-    install_packages "${MODULE_DIR}/packages.txt"
+    install_packages "${PACKAGES}"
 
     # proton-vpn
     sudo wget "https://raw.githubusercontent.com/ProtonVPN/scripts/master/update-resolv-conf.sh" -O "/etc/openvpn/update-resolv-conf"
@@ -16,7 +18,7 @@ if [ "$1" == "install" ]; then
     if [ ! -d $VPN_DIR ]; then
         mkdir $VPN_DIR
     fi
-    copy_configs "${MODULE_DIR}/configs" "$VPN_DIR"
+    copy_configs "${SRC_CONFIGS}" "${DEST_CONFIGS}"
     read -rp "enter proton login: " LOGIN
     read -rp "enter proton password: " PASSWORD
     for file in "$VPN_DIR"/*; do
@@ -32,7 +34,7 @@ fi
 # Uninstall
 if [ "$1" == "uninstall" ]; then
     source "${REP_ROOT}/scripts/cleaning.sh"
-    remove_packages "${MODULE_DIR}/packages.txt"
-    remove_configs "${MODULE_DIR}/configs" "$VPN_DIR"
+    remove_packages "${PACKAGES}"
+    remove_configs "${SRC_CONFIGS}" "${DEST_CONFIGS}"
     sudo rm -rf "/etc/openvpn/update-resolv-conf"
 fi

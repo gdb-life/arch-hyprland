@@ -3,6 +3,7 @@
 # Global variables
 REP_ROOT="$(git rev-parse --show-toplevel)"
 MODULE_DIR="$(dirname "$0")"
+PACKAGES="${MODULE_DIR}/packages.txt"
 
 # Logs
 source "${REP_ROOT}/scripts/logs.sh"
@@ -10,7 +11,7 @@ source "${REP_ROOT}/scripts/logs.sh"
 # Install
 if [ "$1" == "install" ]; then
     source "${REP_ROOT}/scripts/installation.sh"
-    install_packages "${MODULE_DIR}/packages.txt"
+    install_packages "${PACKAGES}"
 
     read -rp "enter the username: " USER
     read -rp "enter the email: " EMAIL
@@ -30,7 +31,7 @@ fi
 # Uninstall
 if [ "$1" == "uninstall" ]; then
     source "${REP_ROOT}/scripts/cleaning.sh"
-    remove_packages "${MODULE_DIR}/packages.txt"
+    remove_packages "${PACKAGES}"
 
     git config --global --unset user.name
     git config --global --unset user.email
