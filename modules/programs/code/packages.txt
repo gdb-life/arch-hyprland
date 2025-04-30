@@ -1,6 +1,6 @@
+gdb
 visual-studio-code-bin
 qtcreator
-pycharm-community-edition
 sublime-text-4
 docker
 docker-desktop
