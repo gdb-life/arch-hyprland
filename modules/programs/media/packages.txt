@@ -1,4 +1,0 @@
-feh
-audacious
-grim
-slurp

@@ -9,7 +9,7 @@ PACKAGES="${MODULE_DIR}/packages.txt"
 if [ "$1" == "install" ]; then
     source "${REP_ROOT}/scripts/installation.sh"
     install_packages "${PACKAGES}"
-    sudo cpupower frequency-set --governor performance
+    sudo cpupower frequency-set --governor schedutil
 fi
 
 # Uninstall

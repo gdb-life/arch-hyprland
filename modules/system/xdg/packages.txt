@@ -1,1 +1,2 @@
 xdg-user-dirs
+archlinux-xdg-menu

@@ -1,6 +1,0 @@
-gdb
-visual-studio-code-bin
-qtcreator
-sublime-text-4
-docker
-docker-desktop

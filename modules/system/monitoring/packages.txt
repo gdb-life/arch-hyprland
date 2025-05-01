@@ -1,4 +1,0 @@
-glances
-fastfetch
-bashtop
-htop

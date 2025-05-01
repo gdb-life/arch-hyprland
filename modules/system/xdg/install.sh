@@ -14,6 +14,7 @@ if [ "$1" == "install" ]; then
     source "${REP_ROOT}/scripts/installation.sh"
     install_packages "${PACKAGES}"
 
+    # Create user dirs
     if [ -f "$CONFIG_FILE" ]; then
         rm -f "$CONFIG_FILE" || { log error "failed to remove old config file"; exit 1; }
     fi
@@ -38,6 +39,9 @@ EOF
     xdg-user-dirs-update || { log error "failed to update xdg-user-dirs"; exit 1; }
 
     log success "xdg-user-dirs configuration installed"
+
+    # Generation service cash
+    XDG_MENU_PREFIX=arch- kbuildsycoca6
 fi
 
 # Uninstall

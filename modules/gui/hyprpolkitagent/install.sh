@@ -5,6 +5,9 @@ REP_ROOT="$(git rev-parse --show-toplevel)"
 MODULE_DIR="$(dirname "$0")"
 PACKAGES="${MODULE_DIR}/packages.txt"
 
+# Logs
+source "${REP_ROOT}/scripts/logs.sh"
+
 # Install
 if [ "$1" == "install" ]; then
     source "${REP_ROOT}/scripts/installation.sh"
