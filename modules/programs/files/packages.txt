@@ -3,7 +3,6 @@ xfce4-settings
 udisks2
 udiskie
 gvfs
-ntfs-3g
 android-file-transfer
 unrar
 dosfstools

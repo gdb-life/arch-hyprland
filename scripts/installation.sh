@@ -68,7 +68,7 @@ copy_configs() {
         dest_file="$dest_dir/$rel_path"
 
         if [[ -e "$dest_file" ]]; then
-            cp -f "$dest_file" "${dest_file}.bak" || { log error "backup failed for $dest_file"; return 1; }
+            cp -f "$dest_file" "${dest_file}.bak.$(date +%F_%T)" || { log error "backup failed for $dest_file"; return 1; }
             # log info "backup created: ${dest_file}.bak"
         fi
 

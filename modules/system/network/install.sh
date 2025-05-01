@@ -15,20 +15,20 @@ if [ "$1" == "install" ]; then
     # proton-vpn
     sudo wget "https://raw.githubusercontent.com/ProtonVPN/scripts/master/update-resolv-conf.sh" -O "/etc/openvpn/update-resolv-conf"
     sudo chmod +x "/etc/openvpn/update-resolv-conf"
-    if [ ! -d $VPN_DIR ]; then
-        mkdir $VPN_DIR
+    if [ ! -d $DEST_CONFIGS ]; then
+        mkdir $DEST_CONFIGS
     fi
     copy_configs "${SRC_CONFIGS}" "${DEST_CONFIGS}"
     read -rp "enter proton login: " LOGIN
     read -rp "enter proton password: " PASSWORD
-    for file in "$VPN_DIR"/*; do
+    for file in "$DEST_CONFIGS"/*; do
         if [ "$(basename "$file")" != "auth.txt" ]; then
             echo "auth-user-pass auth.txt" >> $file
         fi
     done
-    echo "$LOGIN" >> "$VPN_DIR/auth.txt"
-    echo "$PASSWORD" >> "$VPN_DIR/auth.txt"
-    chmod 600 auth.txt
+    echo "$LOGIN" >> "$DEST_CONFIGS/auth.txt"
+    echo "$PASSWORD" >> "$DEST_CONFIGS/auth.txt"
+    sudo chmod 600 "$DEST_CONFIGS/auth.txt"
 fi
 
 # Uninstall
