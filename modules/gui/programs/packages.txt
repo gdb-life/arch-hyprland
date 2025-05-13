@@ -15,7 +15,7 @@ sublime-text-4
 # Containerization
 
 docker
-docker-desktop
+# docker-desktop
 
 
 
@@ -47,13 +47,15 @@ xarchiver
 udisks2
 udiskie
 dosfstools
-ntfsprogs
+ntfs-3g
 
 
 
 # CLI utilities
 
+rsync
 tree
+xclip
 zip
 unzip
 unrar
@@ -108,3 +110,4 @@ htop
 
 qalculate-gtk
 openrgb
+qbittorrent
