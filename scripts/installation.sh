@@ -13,70 +13,109 @@ source "${REP_ROOT}/scripts/logs.sh"
 
 # Install packages
 install_packages() {
-    local pkg_file="$1"
+    local pkg_list=("$@")
+    local to_install=() # for installation packages
+    local installed=()  # for already isntalled packages
 
-    if [ ! -f "$pkg_file" 2>/dev/null ]; then
-        log error "file $pkg_file not found! -_-"
-        return 1
+    # Check existence packages in pkg_list
+    if [[ ${#pkg_list[@]} -eq 0 ]]; then
+        log warning "no packages to install in $(readlink -f "$0")"
+        return 0
     fi
 
-    while read -r pkg || [[ -n "$pkg" ]]; do
-        if [[ -z "$pkg" || "$pkg" =~ ^# ]]; then
-            continue
-        fi
-
+    # Check existence packages in your system and repositories
+    for pkg in "${pkg_list[@]}"; do
         if yay -Qi "$pkg" &>/dev/null; then
-            log success "$pkg already installed"
-            continue
-        else 
-            if ! yay -Si "$pkg" &>/dev/null; then
+            installed+=("$pkg")
+        else
+            if yay -Si "$pkg" &>/dev/null; then
+                to_install+=("$pkg")
+            else
                 log error "$pkg not found in repositories"
                 return 1
             fi
         fi
+    done
 
-        pkg_list+=("$pkg")
-    done < $pkg_file
+    # Print already installed packages
+    if [[ ${#installed[@]} -gt 0 ]]; then
+        log success "already installed: ${installed[*]}"
+    fi
 
-    if [[ ${#pkg_list[@]} -eq 0 ]]; then
-        # log warning "no packages to install in '$pkg_file'"
-        return 0
+    # Install packages
+    # --needed — do not reinstall up to date packages
+    # --answerdiff=None — does not show differences (Diffs to show?);
+    # --answerclean=None — does not offer cleaning (Packages to cleanBuild?);
+    if [[ ! ${#to_install[@]} -eq 0 ]]; then
+        log info-installing "${to_install[*]}"
+        if yay -S --needed --answerdiff=None --answerclean=None "${to_install[@]}"; then
+            log success-installed "${to_install[*]}"
+        else
+            local exit_code=$?
+            log error "failed to install packages (exit code: $exit_code)"
+            return $exit_code
+        fi
     fi
-    
-    if yay -S --noconfirm --needed "${pkg_list[@]}"; then
-        log success "installed: ${pkg_list[*]}"
-    else
-        local exit_code=$?
-        log error "failed to install packages (exit code: $exit_code)"
-        return $exit_code
+}
+
+# Backup files
+backup_file() {
+    local file_path="$1"
+    local dir="$(dirname "$file_path")"
+    local base="$(basename "$file_path")"
+
+    # Check existence old backup
+    local old_backup=$(find "$dir" -maxdepth 1 -name "${base}.bak*" | head -n1)
+    if [[ -n "$old_backup" ]]; then
+        if command -v trash-put &>/dev/null; then
+            trash-put "$old_backup" && log info "moved to trash: previous backup '$old_backup'"
+        else
+            rm -f "$old_backup" && log warning "deleted: previous backup '$old_backup'"
+        fi
     fi
+
+    # local timestamp="$(date +%F_%T)"
+    # local bak_path="${file_path}.bak.$timestamp"
+    local bak_path="${file_path}.bak"
+    sudo cp "$file_path" "$bak_path" || return 1
+    log success-created "backup '$bak_path'"
 }
 
 # Copying configs
 copy_configs() {
-    local src_dir="$1"
-    local dest_dir="$2"
+    local src="$1"      # config file or dir
+    local dest="$2"     # destination dir
 
-    [[ ! -e "$src_dir" ]] && { log error "$src_dir not found!"; return 1; }
-    [[ ! -d "$src_dir" ]] && { log error "'$src_dir' is not a directory!"; return 1; }
-    [[ -z "$(ls -A "$src_dir")" ]] && { log warning "source directory '$src_dir' is empty!"; return 0; }
+    # Сheck existence files
+    [[ ! -e "$src" ]] && { log error "$src not found!"; return 1; }
 
-    mkdir -p "$dest_dir" || { log error "failed to create directory '$dest_dir'"; return 1; }
+    # Create destination dir
+    mkdir -p "$dest" || { log error "failed to create directory '$dest'"; return 1; }
 
-    while read -r -d '' src_file; do
-        rel_path="${src_file#$src_dir/}"
-        dest_file="$dest_dir/$rel_path"
+    # If src — dir
+    if [[ -d "$src" ]]; then
+        while IFS= read -r -d '' file; do
+            rel="${file#$src/}"
+            target="$dest/$rel"
+            # Create backup files
+            if [[ -e "$target" ]]; then
+                backup_file "$target" || { log error "backup failed for '$target'"; return 1; }
+            fi            
+            sudo cp -f "$file" "$target" || { log error "copy failed: $file → $target"; return 1; }
+            log success-created "config '$target'"
+        done < <(find "$src" -type f -print0)
 
-        if [[ -e "$dest_file" ]]; then
-            cp -f "$dest_file" "${dest_file}.bak.$(date +%F_%T)" || { log error "backup failed for $dest_file"; return 1; }
-            # log info "backup created: ${dest_file}.bak"
+    # If src — file
+    elif [[ -f "$src" ]]; then
+        local base="$(basename "$src")"
+        local target="$dest/$base"
+        if [[ -e "$target" ]]; then
+            backup_file "$target" || { log error "backup failed for '$target'"; return 1; }
         fi
-
-        cp -f "$src_file" "$dest_file" || { log error "copy failed: $src_file → $dest_file"; return 1; }
-        # log info "copied $rel_path"
-    done < <(find "$src_dir" -type f -print0)
-
-       
-    # cp -r --remove-destination "$src_dir"/* "$dest_dir" || { log error "error copying configs to $dest_dir"; return 1; }
-    log success "configs copied to $dest_dir"
+        sudo cp -f "$src" "$target" || { log error "copy failed: $src → $target"; return 1; }
+        log success-created "config '$target'"
+    else
+        log error "unsupported source type: '$src'"
+        return 1
+    fi
 }

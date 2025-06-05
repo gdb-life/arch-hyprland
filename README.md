@@ -6,24 +6,12 @@ This repository contains configurations and installation scripts for setting up 
 
 - **modules**: Contains installation scripts and configuration files for Hyprland, Hyprlock, Hyprpaper, Waybar, and various other programs.
 - **scripts**: Contains bash scripts to support installation of the modules.
-- **makefile**: Used to automate installation and configuration tasks.
 
 ## Installation
 
-The `make` will install all the required packages for the Hyprland environment and its configs.
-
-```bash
-make all
-```
+The `./intsall.sh` will install all the required packages for the Hyprland environment and its configs.
 
 You can also install the modules individually by running the scripts in the `modules` directory.
-
-```bash
-make hyprland
-```
-```bash
-make drivers utils
-```
 
 ## License
 
