@@ -61,7 +61,7 @@ tools=(
     cmake
     gdb
 
-    # Storage
+    # Files
     ntfs-3g
     dosfstools
     udisks2
@@ -72,6 +72,7 @@ tools=(
     tree
     mc
     rsync
+    less
 )
 
 # Combining all categories

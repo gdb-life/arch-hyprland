@@ -30,38 +30,62 @@ if [ "$1" == "install" ]; then
     log success-enabled "sddm.service"
 
     # Install grub theme
-    if ask_yes_no "Do you wont to install minegrub grub theme?" no; then
-        if git clone --depth 1 "$MINEGRUB_THEME_REPO" "/tmp/$MINEGRUB_THEME_DIR_NAME"; then
-            # log success "minegrub-theme cloned to /tmp/$MINEGRUB_THEME_DIR_NAME"
-            pushd "/tmp/$MINEGRUB_THEME_DIR_NAME" > /dev/null || exit 1
-            if sudo ./install.sh; then
-                log success "grub minegrub theme installed"
+    # https://github.com/Lxtharia/double-minegrub-menu
+    if ask_yes_no "Do you wont to install grub theme?" no; then
+        if ask_yes_no "Do you wont to install minegrub grub theme?" no; then
+            if git clone --depth 1 "$MINEGRUB_THEME_REPO" "/tmp/$MINEGRUB_THEME_DIR_NAME"; then
+                # log success "minegrub-theme cloned to /tmp/$MINEGRUB_THEME_DIR_NAME"
+                pushd "/tmp/$MINEGRUB_THEME_DIR_NAME" > /dev/null || exit 1
+                if sudo ./install.sh; then
+                    log success "grub minegrub theme installed"
+                else
+                    log error "failed to install minegrub-theme"
+                fi
+                popd > /dev/null || exit 1
+                sudo rm -rf "/tmp/$MINEGRUB_THEME_DIR_NAME"
+                log success "minegrub theme installed"
             else
-                log error "failed to install minegrub-theme"
+                log error "failed to clone minegrub-theme"
             fi
-            popd > /dev/null || exit 1
-            sudo rm -rf "/tmp/$MINEGRUB_THEME_DIR_NAME"
-        else
-            log error "failed to clone minegrub-theme"
+            sudo grub-mkconfig -o /boot/grub/grub.cfg
+            # wait_keypress
         fi
-        sudo grub-mkconfig -o /boot/grub/grub.cfg
-        # wait_keypress
+        # https://github.com/VandalByte/dedsec-grub2-theme
+        if ask_yes_no "Do you wont to install cyberpunk grub theme?" no; then
+            if git clone --depth 1 https://github.com/VandalByte/dedsec-grub2-theme.git && cd dedsec-grub2-theme
+    sudo python3 dedsec-theme.py --install; then
+                log success "grub theme installed"
+            else
+                log error "failed to install theme"
+            fi
+        fi
     fi
 
     # Install sddm theme
-    if ask_yes_no "Do you wont to install minesddm sddm theme?" no; then
-        if git clone --depth 1 "$MINESDDM_THEME_REPO" "/tmp/$MINESDDM_THEME_DIR_NAME"; then
-            pushd "/tmp/$MINESDDM_THEME_DIR_NAME" > /dev/null || exit 1
-            ls -al
-            sudo cp -r $MINESDDM_THEME_NAME $MINESDDM_CLONE_TARGET_PATH
-            popd > /dev/null || exit 1
-            sudo rm -rf "/tmp/$MINESDDM_THEME_DIR_NAME"
+    if ask_yes_no "Do you wont to install sddm theme?" no; then
+        # https://github.com/Davi-S/sddm-theme-minesddm
+        if ask_yes_no "Do you wont to install minesddm sddm theme?" no; then
+            if git clone --depth 1 "$MINESDDM_THEME_REPO" "/tmp/$MINESDDM_THEME_DIR_NAME"; then
+                pushd "/tmp/$MINESDDM_THEME_DIR_NAME" > /dev/null || exit 1
+                ls -al
+                sudo cp -r $MINESDDM_THEME_NAME $MINESDDM_CLONE_TARGET_PATH
+                popd > /dev/null || exit 1
+                sudo rm -rf "/tmp/$MINESDDM_THEME_DIR_NAME"
 
-            sudo mkdir -p "$SDDM_CONFIG_DIR" || { log error "failed to create directory $SDDM_CONFIG_DIR"; exit 1; }
-            copy_configs "$SDDM_CONFIG_SRC" "$SDDM_CONFIG_DIR"
-            log success "sddm minesddm theme installed"
-        else
-            log error "failed to clone sddm-theme-minesddm"
+                sudo mkdir -p "$SDDM_CONFIG_DIR" || { log error "failed to create directory $SDDM_CONFIG_DIR"; exit 1; }
+                copy_configs "$SDDM_CONFIG_SRC" "$SDDM_CONFIG_DIR"
+                log success "sddm minesddm theme installed"
+            else
+                log error "failed to clone sddm-theme-minesddm"
+            fi
+        fi
+        # https://github.com/Keyitdev/sddm-astronaut-theme
+        if ask_yes_no "Do you wont to install astronaul theme?" no; then
+            if sh -c "$(curl -fsSL https://raw.githubusercontent.com/keyitdev/sddm-astronaut-theme/master/setup.sh)"; then
+                log success "sddm astronaul theme installed"
+            else
+                log error "failed to install theme"
+            fi
         fi
     fi
 

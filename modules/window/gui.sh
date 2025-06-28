@@ -30,6 +30,8 @@ gtk=(
     gtk4
 
     dbus-glib
+
+    nwg-look # gui for gsettings
 )
 
 # Combining all categories
