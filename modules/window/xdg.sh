@@ -8,12 +8,15 @@ PACKAGES=(
     xdg-user-dirs
     xdg-desktop-portal
     xdg-desktop-portal-hyprland # wayland backend
+    xdg-desktop-portal-kde # for kde apps
 )
 
 # Install
 if [ "$1" == "install" ]; then
     source "${REP_ROOT}/scripts/installation.sh"
     install_packages "${PACKAGES[@]}"
+
+    sudo update-desktop-database /usr/share/applications # recreate mimeinfo.cache (for default applications)
 
     # Create user dirs
 
