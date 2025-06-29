@@ -69,9 +69,6 @@ install_scripts=(
 
 	# Programs module
 	"${REP_ROOT}/modules/programs.sh install"
-
-	# My user packages
-	"${REP_ROOT}/modules/my_programs.sh install"
 )
 
 for script in "${install_scripts[@]}"; do
